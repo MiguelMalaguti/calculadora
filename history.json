@@ -1,0 +1,37 @@
+[
+  {
+    "id": "mpimbsh4vz1q3",
+    "expression": "Plotar: f(x) = sin(x)",
+    "result": "Gráfico renderizado",
+    "type": "graphing",
+    "timestamp": "2026-05-23T17:24:21.341Z"
+  },
+  {
+    "id": "mpimbbe7z5n6i",
+    "expression": "Plotar: f(x) = sin(x)",
+    "result": "Gráfico renderizado",
+    "type": "graphing",
+    "timestamp": "2026-05-23T17:23:59.199Z"
+  },
+  {
+    "id": "mpimb78bxvjij",
+    "expression": "9999*2222",
+    "result": 22217778,
+    "type": "scientific",
+    "timestamp": "2026-05-23T17:23:53.808Z"
+  },
+  {
+    "id": "mpim9xj6c9enj",
+    "expression": "7+5",
+    "result": 12,
+    "type": "scientific",
+    "timestamp": "2026-05-23T17:22:54.529Z"
+  },
+  {
+    "id": "mpilmpylrwom7",
+    "expression": "(2+3)*4",
+    "result": "20",
+    "type": "scientific",
+    "timestamp": "2026-05-23T17:04:51.694Z"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "name": "calculadora-avancada",
+  "version": "1.0.0",
+  "description": "Uma calculadora avançada (científica, gráfica, programador e conversor) com backend em Node.js e visual Glassmorphism premium.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "calculator",
+    "advanced",
+    "scientific",
+    "graphing",
+    "programmer",
+    "express",
+    "nodejs"
+  ],
+  "author": "Antigravity AI",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mathjs": "^15.2.0",
+    "playwright": "^1.60.0"
+  }
+}

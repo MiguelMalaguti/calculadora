@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Calc | Calculadora Científica & Gráfica Avançada</title>
+  <meta name="description" content="Uma calculadora web avançada com modos Científico, Gráfico 2D, Programador e Conversor de Unidades. Desenvolvida em Node.js com design premium Glassmorphism.">
+  
+  <!-- Google Fonts: Outfit (Interface) e Fira Code (Displays/Números) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Estilos Personalizados -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- MathJS para parsing e cálculos avançados de forma segura e offline -->
+  <script src="/mathjs/lib/browser/math.js"></script>
+</head>
+<body class="dark-theme">
+  <div class="bg-glow"></div>
+  <div class="bg-glow secondary"></div>
+
+  <div class="app-container">
+    <!-- Cabeçalho Principal -->
+    <header class="app-header">
+      <div class="logo">
+        <i class="fa-solid fa-square-root-variable logo-icon"></i>
+        <h1>NEXUS<span>CALC</span></h1>
+      </div>
+      
+      <!-- Seletor de Modos -->
+      <nav class="mode-selector" id="modeSelector">
+        <button class="mode-btn active" data-mode="scientific" id="btnModeScientific">
+          <i class="fa-solid fa-flask"></i> Científico
+        </button>
+        <button class="mode-btn" data-mode="graphing" id="btnModeGraphing">
+          <i class="fa-solid fa-chart-line"></i> Gráfico 2D
+        </button>
+        <button class="mode-btn" data-mode="programmer" id="btnModeProgrammer">
+          <i class="fa-solid fa-terminal"></i> Programador
+        </button>
+        <button class="mode-btn" data-mode="converter" id="btnModeConverter">
+          <i class="fa-solid fa-right-left"></i> Conversor
+        </button>
+      </nav>
+
+      <!-- Botões de Utilidade (Tema e Histórico) -->
+      <div class="header-actions">
+        <button class="action-btn" id="themeToggleBtn" title="Alternar Tema">
+          <i class="fa-solid fa-sun icon-light"></i>
+          <i class="fa-solid fa-moon icon-dark"></i>
+        </button>
+        <button class="action-btn" id="historyToggleBtn" title="Ver Histórico">
+          <i class="fa-solid fa-history"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Corpo Principal da Calculadora -->
+    <main class="calculator-body">
+      
+      <!-- Lado Esquerdo: A Calculadora Ativa -->
+      <section class="calc-main-area">
+        
+        <!-- Display Principal (Usado nos modos Científico e Gráfico) -->
+        <div class="display-container" id="displayContainer">
+          <div class="display-mode-label" id="displayModeLabel">Modo Científico</div>
+          <div class="display-expression" id="displayExpression" placeholder="0"></div>
+          <div class="display-result" id="displayResult">0</div>
+        </div>
+
+        <!-- ================= MODO CIENTÍFICO ================= -->
+        <div class="calc-keyboard active" id="keypadScientific">
+          <!-- Teclas Científicas -->
+          <div class="grid-scientific">
+            <button class="btn btn-sci" data-val="sin(">sin</button>
+            <button class="btn btn-sci" data-val="cos(">cos</button>
+            <button class="btn btn-sci" data-val="tan(">tan</button>
+            <button class="btn btn-sci" data-val="log(">log</button>
+            <button class="btn btn-sci" data-val="ln(">ln</button>
+            
+            <button class="btn btn-sci" data-val="asin(">asin</button>
+            <button class="btn btn-sci" data-val="acos(">acos</button>
+            <button class="btn btn-sci" data-val="atan(">atan</button>
+            <button class="btn btn-sci" data-val="^">x<sup>y</sup></button>
+            <button class="btn btn-sci" data-val="sqrt(">√</button>
+            
+            <button class="btn btn-sci" data-val="pi">π</button>
+            <button class="btn btn-sci" data-val="e">e</button>
+            <button class="btn btn-sci" data-val="!">x!</button>
+            <button class="btn btn-sci" data-val="(">(</button>
+            <button class="btn btn-sci" data-val=")">)</button>
+          </div>
+
+          <!-- Teclas Básicas (Numéricas e Operadores) -->
+          <div class="grid-basic">
+            <button class="btn btn-danger" id="btnClear">C</button>
+            <button class="btn btn-sci" data-val="^2">x²</button>
+            <button class="btn btn-sci" data-val="%">%</button>
+            <button class="btn btn-operator" data-val="/">÷</button>
+            
+            <button class="btn btn-num" data-val="7">7</button>
+            <button class="btn btn-num" data-val="8">8</button>
+            <button class="btn btn-num" data-val="9">9</button>
+            <button class="btn btn-operator" data-val="*">×</button>
+            
+            <button class="btn btn-num" data-val="4">4</button>
+            <button class="btn btn-num" data-val="5">5</button>
+            <button class="btn btn-num" data-val="6">6</button>
+            <button class="btn btn-operator" data-val="-">-</button>
+            
+            <button class="btn btn-num" data-val="1">1</button>
+            <button class="btn btn-num" data-val="2">2</button>
+            <button class="btn btn-num" data-val="3">3</button>
+            <button class="btn btn-operator" data-val="+">+</button>
+            
+            <button class="btn btn-num" data-val="0">0</button>
+            <button class="btn btn-num" data-val=".">.</button>
+            <button class="btn btn-secondary" id="btnBackspace"><i class="fa-solid fa-delete-left"></i></button>
+            <button class="btn btn-primary" id="btnEquals">=</button>
+          </div>
+        </div>
+
+        <!-- ================= MODO GRÁFICO ================= -->
+        <div class="calc-keyboard" id="keypadGraphing">
+          <div class="graph-layout">
+            <div class="graph-input-bar">
+              <span class="function-y">f(x) =</span>
+              <input type="text" id="graphFuncInput" placeholder="Ex: x^2 - 4*x + 3" value="sin(x)">
+              <button class="btn btn-primary" id="btnPlotGraph"><i class="fa-solid fa-chart-line"></i> Plotar</button>
+            </div>
+            
+            <div class="graph-canvas-container">
+              <canvas id="graphCanvas"></canvas>
+              <div class="graph-controls">
+                <button class="graph-zoom-btn" id="btnZoomIn" title="Aumentar Zoom"><i class="fa-solid fa-plus"></i></button>
+                <button class="graph-zoom-btn" id="btnZoomOut" title="Diminuir Zoom"><i class="fa-solid fa-minus"></i></button>
+                <button class="graph-zoom-btn" id="btnResetZoom" title="Resetar Visualização"><i class="fa-solid fa-arrows-to-dot"></i></button>
+              </div>
+            </div>
+
+            <!-- Botões úteis para digitação rápida de fórmulas -->
+            <div class="graph-quick-keys">
+              <button class="btn btn-sci" data-val="x">x</button>
+              <button class="btn btn-sci" data-val="^2">x²</button>
+              <button class="btn btn-sci" data-val="^">^</button>
+              <button class="btn btn-sci" data-val="sin(x)">sin(x)</button>
+              <button class="btn btn-sci" data-val="cos(x)">cos(x)</button>
+              <button class="btn btn-sci" data-val="tan(x)">tan(x)</button>
+              <button class="btn btn-sci" data-val="sqrt(x)">√x</button>
+              <button class="btn btn-sci" data-val="log(x)">log(x)</button>
+              <button class="btn btn-danger" id="btnGraphClear">Limpar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= MODO PROGRAMADOR ================= -->
+        <div class="calc-keyboard" id="keypadProgrammer">
+          <!-- Painel de Bases Numéricas -->
+          <div class="programmer-bases-panel">
+            <div class="base-row active" data-base="10" id="rowDec">
+              <span class="base-label">DEC</span>
+              <span class="base-value" id="valDec">0</span>
+            </div>
+            <div class="base-row" data-base="16" id="rowHex">
+              <span class="base-label">HEX</span>
+              <span class="base-value" id="valHex">0</span>
+            </div>
+            <div class="base-row" data-base="8" id="rowOct">
+              <span class="base-label">OCT</span>
+              <span class="base-value" id="valOct">0</span>
+            </div>
+            <div class="base-row" data-base="2" id="rowBin">
+              <span class="base-label">BIN</span>
+              <span class="base-value" id="valBin">0000 0000</span>
+            </div>
+          </div>
+
+          <div class="programmer-layout">
+            <!-- Botões Bitwise e Hexadecimais A-F -->
+            <div class="grid-prog-ops">
+              <button class="btn btn-sci btn-hex" data-val="A" disabled>A</button>
+              <button class="btn btn-sci btn-hex" data-val="B" disabled>B</button>
+              <button class="btn btn-sci btn-hex" data-val="C" disabled>C</button>
+              <button class="btn btn-sci" data-val="AND">AND</button>
+              <button class="btn btn-sci" data-val="OR">OR</button>
+              
+              <button class="btn btn-sci btn-hex" data-val="D" disabled>D</button>
+              <button class="btn btn-sci btn-hex" data-val="E" disabled>E</button>
+              <button class="btn btn-sci btn-hex" data-val="F" disabled>F</button>
+              <button class="btn btn-sci" data-val="XOR">XOR</button>
+              <button class="btn btn-sci" data-val="NOT">NOT</button>
+
+              <button class="btn btn-sci" data-val="<<">Lsh</button>
+              <button class="btn btn-sci" data-val=">>">Rsh</button>
+              <button class="btn btn-sci" data-val="mod">Mod</button>
+              <button class="btn btn-danger" id="btnProgClear">C</button>
+              <button class="btn btn-secondary" id="btnProgBackspace"><i class="fa-solid fa-delete-left"></i></button>
+            </div>
+
+            <!-- Grid de Teclado Numérico Programador -->
+            <div class="grid-prog-num">
+              <button class="btn btn-num btn-prog-digit" data-val="7">7</button>
+              <button class="btn btn-num btn-prog-digit" data-val="8">8</button>
+              <button class="btn btn-num btn-prog-digit" data-val="9">9</button>
+              
+              <button class="btn btn-num btn-prog-digit" data-val="4">4</button>
+              <button class="btn btn-num btn-prog-digit" data-val="5">5</button>
+              <button class="btn btn-num btn-prog-digit" data-val="6">6</button>
+              
+              <button class="btn btn-num btn-prog-digit" data-val="1">1</button>
+              <button class="btn btn-num btn-prog-digit" data-val="2">2</button>
+              <button class="btn btn-num btn-prog-digit" data-val="3">3</button>
+              
+              <button class="btn btn-num btn-prog-digit btn-double" data-val="0">0</button>
+              <button class="btn btn-primary" id="btnProgEquals">=</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= MODO CONVERSOR ================= -->
+        <div class="calc-keyboard" id="keypadConverter">
+          <div class="converter-layout">
+            <!-- Categoria do Conversor -->
+            <div class="conv-category-selector">
+              <label for="convCategory"><i class="fa-solid fa-list"></i> Categoria</label>
+              <select id="convCategory">
+                <option value="length">Comprimento (m, km, cm, mm, polegadas, pés, milhas)</option>
+                <option value="weight">Peso (kg, g, mg, libras, onças)</option>
+                <option value="temperature">Temperatura (Celsius, Fahrenheit, Kelvin)</option>
+                <option value="speed">Velocidade (km/h, m/s, mph, nós)</option>
+              </select>
+            </div>
+
+            <div class="conv-inputs-grid">
+              <!-- Unidade de Origem -->
+              <div class="conv-card">
+                <label for="convUnitFrom">De:</label>
+                <select id="convUnitFrom"></select>
+                <input type="number" id="convValueFrom" value="1" placeholder="Digite o valor">
+              </div>
+
+              <!-- Ícone de troca rápida -->
+              <div class="conv-swap-container">
+                <button class="conv-swap-btn" id="btnConvSwap" title="Inverter unidades">
+                  <i class="fa-solid fa-right-left"></i>
+                </button>
+              </div>
+
+              <!-- Unidade de Destino -->
+              <div class="conv-card highlight">
+                <label for="convUnitTo">Para:</label>
+                <select id="convUnitTo"></select>
+                <div class="conv-result-display" id="convValueTo">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Lado Direito: Histórico Lateral (Sincronizado via API) -->
+      <aside class="history-sidebar" id="historySidebar">
+        <div class="sidebar-header">
+          <h3><i class="fa-solid fa-history"></i> Histórico</h3>
+          <button class="clear-history-btn" id="btnClearHistory" title="Limpar Histórico">
+            <i class="fa-solid fa-trash-can"></i> Limpar
+          </button>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="history-empty-state">
+            <i class="fa-solid fa-folder-open"></i>
+            <p>Nenhum cálculo recente</p>
+          </div>
+        </div>
+      </aside>
+      
+    </main>
+  </div>
+
+  <footer class="app-footer">
+    <p>Nexus Calc &copy; 2026 | Desenvolvido com Node.js e design UI Premium</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
